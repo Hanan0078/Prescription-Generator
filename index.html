@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optometrist Prescription / آپٹومیٹرسٹ پریسکرپشن</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for better print output and specific elements */
+        @media print {
+            body {
+                font-size: 12pt;
+                margin: 0;
+                padding: 0;
+                -webkit-print-color-adjust: exact; /* Ensure background colors are printed */
+                print-color-adjust: exact;
+                direction: ltr !important; /* Ensure LTR direction in print */
+                text-align: left !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .prescription-container {
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                width: 100% !important;
+                max-width: none !important;
+            }
+            table {
+                width: 100% !important;
+                border-collapse: collapse;
+            }
+            th, td {
+                border: 1px solid #000 !important;
+                padding: 8px !important;
+            }
+             .logo-container {
+                max-width: 100px; /* Smaller logo in print */
+                height: auto;
+                margin-right: 10px !important; /* Space after logo */
+                margin-left: 0 !important;
+            }
+             .header-section {
+                flex-direction: row !important; /* Ensure row layout in print */
+                align-items: center !important;
+                background-color: #3b0764 !important; /* Print header background */
+                color: #fff !important; /* Print header text color */
+                padding: 10px !important;
+                border-radius: 0 !important;
+            }
+             .header-info {
+                flex-grow: 1; /* Allow info to take available space */
+                text-align: left !important; /* Align text left in print */
+            }
+             .clinic-name-print {
+                 font-size: 18pt !important;
+                 font-weight: bold !important;
+                 color: #fff !important;
+             }
+             .doctor-name-print {
+                 font-size: 14pt !important;
+                 color: #e5e7eb !important;
+             }
+             .clinic-address-print {
+                 font-size: 10pt !important;
+                 color: #d1d5db !important;
+             }
+             .section-heading {
+                 font-size: 14pt !important;
+                 font-weight: bold !important;
+                 margin-top: 15px !important;
+                 margin-bottom: 8px !important;
+                 border-bottom: 1px solid #ccc !important;
+                 padding-bottom: 4px !important;
+             }
+             input[type="text"], input[type="number"], input[type="date"], textarea, select {
+                 border: none !important;
+                 padding: 4px !important;
+                 font-size: 10pt !important;
+                 direction: ltr !important; /* Ensure inputs are LTR in print */
+                 text-align: left !important;
+             }
+             td input, td select {
+                 padding: 0 !important;
+                 text-align: center !important; /* Keep table inputs centered */
+             }
+             /* Specific handling for potential Urdu input in print */
+             .urdu-input-print {
+                 direction: rtl !important;
+                 text-align: right !important;
+             }
+             .medication-entry {
+                 margin-bottom: 5px !important;
+                 padding-bottom: 5px !important;
+                 border-bottom: 1px dashed #ccc !important;
+             }
+             .medication-entry:last-child {
+                 border-bottom: none !important;
+             }
+             .medication-entry textarea {
+                 border: none !important;
+                 padding: 0 !important;
+                 font-size: 10pt !important;
+             }
+        }
+
+        /* General styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light blue-gray background */
+            direction: ltr; /* Left-to-right as main focus */
+            text-align: left;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden; /* Hide overflow for rounded corners */
+        }
+
+        .header-section {
+            background-color: #3b0764; /* Dark purple header */
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            flex-direction: column; /* Stack on small screens */
+            align-items: center; /* Center items on small screens */
+            justify-content: space-between;
+        }
+
+        .header-info {
+            flex-grow: 1;
+            text-align: center; /* Center text on small screens */
+        }
+
+        .clinic-name {
+            font-size: 2rem; /* Larger clinic name */
+            font-weight: bold;
+            color: #facc15; /* Golden color for clinic name */
+            margin-bottom: 5px;
+        }
+
+        .doctor-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #e5e7eb; /* Light gray for doctor name */
+            margin-bottom: 5px;
+        }
+
+        .clinic-address {
+            font-size: 0.9rem;
+            color: #d1d5db; /* Lighter gray for address */
+        }
+
+        .logo-container {
+            max-width: 100px; /* Smaller logo size */
+            height: auto;
+            margin-bottom: 15px; /* Space below logo on small screens */
+        }
+
+        .logo-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+        }
+
+        @media (min-width: 768px) { /* Medium screens and up */
+            .header-section {
+                flex-direction: row; /* Row layout on larger screens */
+                align-items: center; /* Align items to the center */
+            }
+            .header-info {
+                 text-align: left; /* Align text to the left on larger screens */
+            }
+            .logo-container {
+                 margin-bottom: 0; /* Remove bottom margin */
+                 margin-right: 20px; /* Add right margin for LTR */
+                 margin-left: 0; /* Remove left margin for LTR */
+            }
+             .clinic-name {
+                 font-size: 2.5rem; /* Even larger clinic name on desktop */
+             }
+        }
+
+        .content-padding {
+            padding: 20px 30px; /* Padding for the content area */
+        }
+
+        input[type="text"], input[type="number"], input[type="date"], textarea, select {
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 1rem;
+            color: #333;
+            background-color: #f9fafb; /* Light background for inputs */
+            direction: ltr; /* Default direction for inputs */
+            text-align: left;
+        }
+
+        /* Specific inputs that might contain Urdu text */
+         #patient-name, #medical-history, #complaints, #findings, #plan, #diagnosis, .medication-input {
+             direction: ltr; /* Start with LTR */
+             text-align: left; /* Start with left alignment */
+         }
+
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
+        }
+
+        .section-heading {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #e2e8f0; /* Separator line */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+         td input[type="text"], td input[type="number"] {
+            border: none;
+            padding: 0;
+            text-align: center;
+            background-color: transparent;
+             direction: ltr; /* Ensure table inputs are LTR */
+        }
+
+        .button {
+            background-color: #3b82f6;
+            color: white;
+            font-weight: bold;
+            padding: 12px 24px; /* Larger buttons */
+            border-radius: 6px;
+            transition: background-color 0.2s ease-in-out;
+            cursor: pointer;
+            border: none;
+        }
+
+        .button:hover {
+            background-color: #2563eb;
+        }
+
+         .button-green {
+            background-color: #10b981;
+        }
+         .button-green:hover {
+            background-color: #059669;
+        }
+
+         .button-red {
+            background-color: #ef4444;
+         }
+         .button-red:hover {
+            background-color: #dc2626;
+         }
+
+         .button-gray {
+             background-color: #6b7280;
+         }
+         .button-gray:hover {
+             background-color: #4b5563;
+         }
+
+         .medication-entry {
+             display: flex;
+             align-items: center;
+             gap: 10px;
+             margin-bottom: 10px;
+             padding-bottom: 10px;
+             border-bottom: 1px dashed #e2e8f0;
+         }
+
+         .medication-entry:last-child {
+             border-bottom: none;
+         }
+
+         .medication-entry textarea {
+             flex-grow: 1;
+             margin-bottom: 0; /* Remove bottom margin from textarea in flex */
+         }
+
+    </style>
+</head>
+<body class="p-4">
+
+    <div id="prescription-area" class="container prescription-container">
+
+        <div class="header-section">
+             <div id="logo-preview" class="logo-container">
+                <span class="text-gray-300 text-sm">Logo Preview</span>
+            </div>
+            <div class="header-info">
+                <div class="clinic-name" id="clinic-name-display">Your Clinic Name Here</div>
+                <div class="doctor-name" id="doctor-name-display">Doctor/Optometrist Name</div>
+                <div class="clinic-address" id="clinic-address-display">Your Address Here</div>
+            </div>
+        </div>
+
+        <div class="content-padding">
+            <div class="no-print mb-6 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                 <h4 class="text-lg font-semibold mb-3">Clinic Details (Not visible in print):</h4>
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                     <div>
+                         <label for="clinic-name-input" class="block text-sm font-medium text-gray-700 mb-1">Clinic Name / کلینک کا نام:</label>
+                         <input type="text" id="clinic-name-input" value="Your Clinic Name Here">
+                     </div>
+                     <div>
+                         <label for="doctor-name-input" class="block text-sm font-medium text-gray-700 mb-1">Doctor/Optometrist Name / ڈاکٹر/آپٹومیٹرسٹ کا نام:</label>
+                         <input type="text" id="doctor-name-input" value="Doctor/Optometrist Name">
+                     </div>
+                      <div class="md:col-span-2">
+                         <label for="clinic-address-input" class="block text-sm font-medium text-gray-700 mb-1">Address / پتہ:</label>
+                         <input type="text" id="clinic-address-input" value="Your Address Here">
+                     </div>
+                 </div>
+            </div>
+
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6"> <div>
+                    <label for="patient-name" class="block text-sm font-medium text-gray-700 mb-1">Patient Name / مریض کا نام:</label>
+                    <input type="text" id="patient-name">
+                </div>
+                <div>
+                    <label for="patient-age" class="block text-sm font-medium text-gray-700 mb-1">Age / عمر:</label>
+                    <input type="number" id="patient-age">
+                </div>
+                 <div>
+                    <label for="patient-gender" class="block text-sm font-medium text-gray-700 mb-1">Gender / جنس:</label>
+                    <select id="patient-gender">
+                        <option value="">Select / منتخب کریں</option>
+                        <option value="Male">Male / مرد</option>
+                        <option value="Female">Female / عورت</option>
+                        <option value="Other">Other / دیگر</option>
+                    </select>
+                </div>
+                 <div>
+                    <label for="prescription-date" class="block text-sm font-medium text-gray-700 mb-1">Date / تاریخ:</label>
+                    <input type="date" id="prescription-date">
+                </div>
+            </div>
+
+            <h3 class="section-heading">Medical History / میڈیکل ہسٹری:</h3>
+            <div class="mb-6">
+                <textarea id="medical-history" rows="2" class="w-full"></textarea>
+            </div>
+
+             <h3 class="section-heading">History / ہسٹری:</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div>
+                    <label for="history-htn" class="block text-sm font-medium text-gray-700 mb-1">HTN:</label>
+                    <select id="history-htn">
+                        <option value="No">No / نہیں</option>
+                        <option value="Yes">Yes / ہاں</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="history-dm" class="block text-sm font-medium text-gray-700 mb-1">DM:</label>
+                     <select id="history-dm">
+                        <option value="No">No / نہیں</option>
+                        <option value="Yes">Yes / ہاں</option>
+                    </select>
+                </div>
+            </div>
+
+             <h3 class="section-heading">Complaints / شکایات:</h3>
+            <div class="mb-6">
+                <textarea id="complaints" rows="2" class="w-full"></textarea>
+            </div>
+
+             <h3 class="section-heading">Findings / نتائج:</h3>
+            <div class="mb-6">
+                <textarea id="findings" rows="2" class="w-full"></textarea>
+            </div>
+
+             <h3 class="section-heading">Plan / پلان:</h3>
+            <div class="mb-6">
+                <textarea id="plan" rows="2" class="w-full"></textarea>
+            </div>
+
+             <h3 class="section-heading">Diagnosis / تشخیص:</h3>
+            <div class="mb-6">
+                <textarea id="diagnosis" rows="2" class="w-full"></textarea>
+            </div>
+
+
+            <h3 class="section-heading">Prescription (Rx) / پریسکرپشن (Rx):</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Eye / آنکھ</th>
+                        <th>Sphere (SPH)</th>
+                        <th>Cylinder (CYL)</th>
+                        <th>Axis</th>
+                        <th>Add</th>
+                        <th>PD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>OD (Right) / (دائیں)</td>
+                        <td><input type="text" class="text-center"></td>
+                        <td><input type="text" class="text-center"></td>
+                        <td><input type="number" class="text-center"></td>
+                        <td><input type="text" class="text-center"></td>
+                        <td rowspan="2"><input type="text" class="text-center h-full"></td>
+                    </tr>
+                    <tr>
+                        <td>OS (Left) / (بائیں)</td>
+                        <td><input type="text" class="text-center"></td>
+                        <td><input type="text" class="text-center"></td>
+                        <td><input type="number" class="text-center"></td>
+                        <td><input type="text" class="text-center"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+             <h3 class="section-heading">Medication (Rx) / ادویات (Rx):</h3>
+            <div id="medication-entries">
+                <div class="medication-entry">
+                     <textarea class="medication-input" rows="1" placeholder="Enter medication details / دوا کی تفصیلات درج کریں"></textarea>
+                 </div>
+            </div>
+             <button id="add-medication-btn" class="button button-gray text-sm py-1 px-2 mt-2">
+                 Add Medication / دوا شامل کریں
+             </button>
+
+
+        </div> </div> <div class="no-print container mt-4 flex flex-col md:flex-row justify-center gap-4 p-4">
+        <input type="file" id="logo-upload" accept="image/*" class="hidden">
+        <button id="upload-logo-btn" class="button">
+            Upload Logo / لوگو اپ لوڈ کریں
+        </button>
+         <button id="save-btn" class="button button-blue">
+            Save Prescription / محفوظ کریں
+        </button>
+        <button id="load-btn" class="button button-blue">
+            Load Prescription / لوڈ کریں
+        </button>
+         <button id="clear-btn" class="button button-red">
+            Clear Form / فارم صاف کریں
+        </button>
+        <button id="print-btn" class="button button-green">
+            Generate Prescription / پریسکرپشن بنائیں
+        </button>
+    </div>
+
+    <script>
+        // Set current date
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateInput = document.getElementById('prescription-date');
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+            const day = String(today.getDate()).padStart(2, '0');
+            dateInput.value = `${year}-${month}-${day}`;
+
+            // Get header display elements
+            const clinicNameDisplay = document.getElementById('clinic-name-display');
+            const doctorNameDisplay = document.getElementById('doctor-name-display');
+            const clinicAddressDisplay = document.getElementById('clinic-address-display');
+
+            // Get header input elements
+            const clinicNameInput = document.getElementById('clinic-name-input');
+            const doctorNameInput = document.getElementById('doctor-name-input');
+            const clinicAddressInput = document.getElementById('clinic-address-input');
+
+            // Function to update header display from inputs
+            const updateHeaderDisplay = () => {
+                clinicNameDisplay.textContent = clinicNameInput.value || 'Your Clinic Name Here'; // Default text if empty
+                doctorNameDisplay.textContent = doctorNameInput.value || 'Doctor/Optometrist Name';
+                clinicAddressDisplay.textContent = clinicAddressInput.value || 'Your Address Here';
+            };
+
+            // Update display initially and on input change
+            updateHeaderDisplay();
+            clinicNameInput.addEventListener('input', updateHeaderDisplay);
+            doctorNameInput.addEventListener('input', updateHeaderDisplay);
+            clinicAddressInput.addEventListener('input', updateHeaderDisplay);
+
+
+            // Handle logo upload
+            const logoUploadInput = document.getElementById('logo-upload');
+            const uploadLogoBtn = document.getElementById('upload-logo-btn');
+            const logoPreview = document.getElementById('logo-preview');
+            let logoDataUrl = null; // Variable to store logo data URL
+
+            uploadLogoBtn.addEventListener('click', () => {
+                logoUploadInput.click();
+            });
+
+            logoUploadInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        // Clear previous content
+                        logoPreview.innerHTML = '';
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.alt = 'Clinic Logo';
+                        img.classList.add('max-w-full', 'h-auto', 'rounded'); // Add Tailwind classes for styling
+                        logoPreview.appendChild(img);
+                        logoDataUrl = e.target.result; // Store data URL
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                     // If no file selected, show default text and clear stored data URL
+                     logoPreview.innerHTML = '<span class="text-gray-300 text-sm">Logo Preview</span>';
+                     logoDataUrl = null;
+                }
+            });
+
+            // Handle print button
+            const printBtn = document.getElementById('print-btn');
+            printBtn.addEventListener('click', () => {
+                window.print();
+            });
+
+            // Handle Clear Form button
+            const clearBtn = document.getElementById('clear-btn');
+            clearBtn.addEventListener('click', () => {
+                // Clear all input fields, textareas, and selects
+                document.querySelectorAll('input, textarea, select').forEach(element => {
+                    if (element.type === 'checkbox' || element.type === 'radio') {
+                        element.checked = false;
+                    } else if (element.tagName === 'SELECT') {
+                        element.selectedIndex = 0; // Reset dropdowns
+                    } else {
+                        element.value = '';
+                    }
+                     // Reset direction and alignment for potentially Urdu inputs
+                     if (['patient-name', 'medical-history', 'complaints', 'findings', 'plan', 'diagnosis'].includes(element.id) || element.classList.contains('medication-input')) {
+                         element.style.direction = 'ltr';
+                         element.style.textAlign = 'left';
+                         element.classList.remove('urdu-input-print');
+                     }
+                });
+
+                // Reset header display to default text
+                clinicNameInput.value = 'Your Clinic Name Here';
+                doctorNameInput.value = 'Doctor/Optometrist Name';
+                clinicAddressInput.value = 'Your Address Here';
+                updateHeaderDisplay();
+
+                // Clear logo preview and stored data URL
+                logoPreview.innerHTML = '<span class="text-gray-300 text-sm">Logo Preview</span>';
+                logoDataUrl = null;
+
+                // Clear dynamic medication entries, leaving one blank
+                const medicationEntriesDiv = document.getElementById('medication-entries');
+                medicationEntriesDiv.innerHTML = `
+                    <div class="medication-entry">
+                        <textarea class="medication-input" rows="1" placeholder="Enter medication details / دوا کی تفصیلات درج کریں"></textarea>
+                    </div>
+                `;
+                 // Re-add event listener to the new textarea
+                 medicationEntriesDiv.querySelector('.medication-input').addEventListener('input', handleUrduInputDirection);
+            });
+
+            // Handle Add Medication button
+            const addMedicationBtn = document.getElementById('add-medication-btn');
+            const medicationEntriesDiv = document.getElementById('medication-entries');
+
+            const addMedicationEntry = (value = '') => {
+                const entryDiv = document.createElement('div');
+                entryDiv.classList.add('medication-entry');
+                entryDiv.innerHTML = `
+                    <textarea class="medication-input" rows="1" placeholder="Enter medication details / دوا کی تفصیلات درج کریں">${value}</textarea>
+                    <button class="remove-medication-btn button button-red text-sm py-1 px-2">Remove / ہٹائیں</button>
+                `;
+                medicationEntriesDiv.appendChild(entryDiv);
+
+                // Add event listener for Urdu input direction
+                entryDiv.querySelector('.medication-input').addEventListener('input', handleUrduInputDirection);
+
+                // Add event listener to the remove button
+                entryDiv.querySelector('.remove-medication-btn').addEventListener('click', () => {
+                    entryDiv.remove();
+                });
+            };
+
+            addMedicationBtn.addEventListener('click', () => addMedicationEntry());
+
+            // Function to get all form data
+            const getFormData = () => {
+                const data = {};
+                document.querySelectorAll('#prescription-area input, #prescription-area textarea, #prescription-area select').forEach(element => {
+                     if (element.id) { // Use ID for unique elements
+                         data[element.id] = element.value;
+                     }
+                });
+
+                // Handle dynamic medication entries separately
+                const medicationInputs = medicationEntriesDiv.querySelectorAll('.medication-input');
+                data['medications'] = Array.from(medicationInputs).map(input => input.value);
+
+                // Include logo data URL
+                data['logoDataUrl'] = logoDataUrl;
+
+                return data;
+            };
+
+             // Function to set form data
+            const setFormData = (data) => {
+                document.querySelectorAll('#prescription-area input, #prescription-area textarea, #prescription-area select').forEach(element => {
+                     if (element.id && data[element.id] !== undefined) {
+                         element.value = data[element.id];
+                     }
+                });
+
+                // Set header input values and update display
+                 if (data['clinic-name-input']) clinicNameInput.value = data['clinic-name-input'];
+                 if (data['doctor-name-input']) doctorNameInput.value = data['doctor-name-input'];
+                 if (data['clinic-address-input']) clinicAddressInput.value = data['clinic-address-input'];
+                 updateHeaderDisplay();
+
+
+                // Set dynamic medication entries
+                medicationEntriesDiv.innerHTML = ''; // Clear existing entries
+                if (data['medications'] && data['medications'].length > 0) {
+                    data['medications'].forEach(medication => addMedicationEntry(medication));
+                } else {
+                     // Add one blank entry if none loaded
+                     addMedicationEntry();
+                }
+
+                // Set logo
+                if (data['logoDataUrl']) {
+                    logoDataUrl = data['logoDataUrl'];
+                    logoPreview.innerHTML = '';
+                    const img = document.createElement('img');
+                    img.src = logoDataUrl;
+                    img.alt = 'Clinic Logo';
+                     img.classList.add('max-w-full', 'h-auto', 'rounded');
+                    logoPreview.appendChild(img);
+                } else {
+                    logoPreview.innerHTML = '<span class="text-gray-300 text-sm">Logo Preview</span>';
+                    logoDataUrl = null;
+                }
+
+                 // Re-apply Urdu direction handling after loading data
+                document.querySelectorAll('#patient-name, #medical-history, #complaints, #findings, #plan, #diagnosis, .medication-input').forEach(input => {
+                     const urduRegex = /[\u0600-\u06FF]/;
+                     if (urduRegex.test(input.value)) {
+                         input.style.direction = 'rtl';
+                         input.style.textAlign = 'right';
+                          input.classList.add('urdu-input-print');
+                     } else {
+                         input.style.direction = 'ltr';
+                         input.style.textAlign = 'left';
+                          input.classList.remove('urdu-input-print');
+                     }
+                });
+            };
+
+            // Handle Save button
+            const saveBtn = document.getElementById('save-btn');
+            saveBtn.addEventListener('click', () => {
+                const formData = getFormData();
+                localStorage.setItem('optometristPrescriptionData', JSON.stringify(formData));
+                alert('Prescription data saved to browser storage!'); // Simple confirmation
+            });
+
+            // Handle Load button
+            const loadBtn = document.getElementById('load-btn');
+            loadBtn.addEventListener('click', () => {
+                const savedData = localStorage.getItem('optometristPrescriptionData');
+                if (savedData) {
+                    const formData = JSON.parse(savedData);
+                    setFormData(formData);
+                    alert('Prescription data loaded from browser storage!'); // Simple confirmation
+                } else {
+                    alert('No saved prescription data found.');
+                }
+            });
+
+             // Function to handle Urdu input direction
+            const handleUrduInputDirection = (event) => {
+                const input = event.target;
+                const urduRegex = /[\u0600-\u06FF]/;
+                if (urduRegex.test(input.value)) {
+                    input.style.direction = 'rtl';
+                    input.style.textAlign = 'right';
+                    input.classList.add('urdu-input-print');
+                } else {
+                    input.style.direction = 'ltr';
+                    input.style.textAlign = 'left';
+                    input.classList.remove('urdu-input-print');
+                }
+            };
+
+             // Add event listeners to input fields that might contain Urdu to adjust direction
+            const urduPossibleInputs = document.querySelectorAll('#patient-name, #medical-history, #complaints, #findings, #plan, #diagnosis, .medication-input');
+
+            urduPossibleInputs.forEach(input => {
+                input.addEventListener('input', handleUrduInputDirection);
+            });
+
+             // Initial setup for one medication entry
+             if (medicationEntriesDiv.children.length === 0) {
+                 addMedicationEntry();
+             }
+
+        });
+    </script>
+
+</body>
+</html>
+
